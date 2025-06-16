@@ -1,107 +1,128 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'androidx.navigation.safeargs.kotlin'
+}
 
 android {
-  compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.realworld.android.petsave"
+        namespace "com.realworld.android.petsave"
+        minSdkVersion 23
+        compileSdkVersion 34
+        targetSdkVersion 34
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-  defaultConfig {
-    applicationId "com.realworld.android.petsave"
-    minSdkVersion rootProject.ext.minSdkVersion
-    targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 1
-    versionName "1.0"
-    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-    javaCompileOptions {
-      annotationProcessorOptions {
-        arguments += [
-                "room.schemaLocation":"$projectDir/schemas".toString(),
-                "room.incremental":"true",
-                "room.expandProjection":"true"]
-      }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
     }
-  }
 
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
-  }
 
-  compileOptions {
-    coreLibraryDesugaringEnabled true
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 
-    sourceCompatibility 17
-    targetCompatibility 17
-  }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
-  buildFeatures {
-    viewBinding true
-  }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
+    def appcompat_version = "1.6.1"
+    def room_version = "2.6.1"
+    def hilt_version = '2.51.1'
+    def nav_version = '2.7.7'
+    def junit_version = "4.13.2"
+    def espresso_version = '3.4.0'
+    def retrofit_version = '2.9.0'
+    def material_version = '1.12.0'
+    def okHttp_version = '4.9.3'
+    def rxjava_version = '2.2.21'
+    def rxkotlin_version = '2.4.0'
+    def rxandroid_version = "2.1.1"
+    def moshi_converter_version = '2.9.0'
 
-  // Kotlin
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    def moshi_version = '1.15.1'
 
-  // Support Libraries
-  implementation "androidx.appcompat:appcompat:$appcompat_version"
-  implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+    def glide_version = "4.13.2"
 
-  // Testing Dependencies
-  testImplementation "junit:junit:$junit_version"
-  androidTestImplementation "androidx.test.ext:junit:$androidx_junit_version"
-  androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-  // TUTORIAL DEPENDENCIES HERE
+    // Support Libraries
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
 
-  // Modules
-  implementation project(":logging")
+    // Testing Dependencies
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:1.1.3"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 
-  // Network
-  implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-  implementation "com.squareup.retrofit2:converter-moshi:$moshi_converter_version"
-  implementation "com.squareup.okhttp3:okhttp:$okHttp_version"
-  implementation "com.squareup.okhttp3:logging-interceptor:$okHttp_version"
-  implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
-  kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+    // TUTORIAL DEPENDENCIES HERE
 
-  // Cache
-  implementation "androidx.room:room-runtime:$room_version"
-  implementation "androidx.room:room-ktx:$room_version"
-  implementation "androidx.room:room-rxjava2:$room_version"
+    // Modules
+    implementation project(":logging")
 
-  kapt "androidx.room:room-compiler:$room_version"
+    // Network
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$moshi_converter_version"
+    implementation "com.squareup.okhttp3:okhttp:$okHttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttp_version"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 
-  testImplementation "androidx.room:room-testing:$room_version"
+    // Cache
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
 
-  // Concurrency
-  implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-  implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-  implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
-  // DI
-  implementation "com.google.dagger:hilt-android:$hilt_version"
-  kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    testImplementation "androidx.room:room-testing:$room_version"
 
-  // UI
-  implementation "com.github.bumptech.glide:glide:$glide_version"
-  kapt "com.github.bumptech.glide:compiler:$glide_version"
+    // Concurrency
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 
-  implementation "com.google.android.material:material:$material_version"
+    // DI
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-  // Navigation
-  implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-  implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    // UI
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
-  androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+    implementation "com.google.android.material:material:$material_version"
 
-  // Utils
-  coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$desugar_jdk_libs_version"
-  debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+
+    // Utils
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:2.9.1"
 }
