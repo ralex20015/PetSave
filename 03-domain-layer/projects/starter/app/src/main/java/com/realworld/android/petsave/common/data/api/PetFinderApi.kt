@@ -34,4 +34,16 @@
 
 package com.realworld.android.petsave.common.data.api
 
-interface PetFinderApi
+import com.realworld.android.petsave.common.data.api.model.ApiPaginatedAnimals
+import retrofit2.http.GET
+import retrofit2.http.Query
+
+interface PetFinderApi {
+    @GET(ApiConstants.ANIMALS_ENDPOINT) // 1
+    suspend fun getNearbyAnimals( // 2
+        @Query(ApiParameters.PAGE) pageToLoad: Int, // 3
+        @Query(ApiParameters.LIMIT) pageSize: Int,
+        @Query(ApiParameters.LOCATION) postcode: String,
+        @Query(ApiParameters.DISTANCE) maxDistance: Int
+    ): ApiPaginatedAnimals
+}
