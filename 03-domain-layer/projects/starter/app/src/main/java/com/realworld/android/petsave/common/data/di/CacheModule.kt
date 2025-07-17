@@ -39,6 +39,7 @@ import androidx.room.Room
 import com.realworld.android.petsave.common.data.cache.Cache
 import com.realworld.android.petsave.common.data.cache.PetSaveDatabase
 import com.realworld.android.petsave.common.data.cache.RoomCache
+import com.realworld.android.petsave.common.data.cache.daos.AnimalsDao
 import com.realworld.android.petsave.common.data.cache.daos.OrganizationsDao
 import dagger.Binds
 import dagger.Module
@@ -46,6 +47,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -57,6 +59,7 @@ abstract class CacheModule {
   companion object {
 
     @Provides
+    @Singleton
     fun provideDatabase(@ApplicationContext context: Context): PetSaveDatabase {
       return Room.databaseBuilder(context, PetSaveDatabase::class.java, "petsave.db")
           .build()
@@ -65,5 +68,9 @@ abstract class CacheModule {
     @Provides
     fun provideOrganizationsDao(petSaveDatabase: PetSaveDatabase): OrganizationsDao =
         petSaveDatabase.organizationsDao()
+
+    @Provides
+    fun providesAnimalsDao(petSaveDatabase: PetSaveDatabase): AnimalsDao =
+      petSaveDatabase.animalsDao()
   }
 }

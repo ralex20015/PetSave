@@ -34,8 +34,12 @@
 
 package com.realworld.android.petsave.common.data.cache
 
+import com.realworld.android.petsave.common.data.cache.model.cachedanimal.CachedAnimalAggregate
 import com.realworld.android.petsave.common.data.cache.model.cachedorganization.CachedOrganization
+import io.reactivex.Flowable
 
 interface Cache {
   fun storeOrganizations(organizations: List<CachedOrganization>)
+  fun getNearbyAnimals(): Flowable<List<CachedAnimalAggregate>>
+  suspend fun storeNearbyAnimals(animals: List<CachedAnimalAggregate>)
 }

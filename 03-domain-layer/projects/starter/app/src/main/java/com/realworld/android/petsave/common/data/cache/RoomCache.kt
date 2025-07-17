@@ -34,15 +34,27 @@
 
 package com.realworld.android.petsave.common.data.cache
 
+import com.realworld.android.petsave.common.data.cache.daos.AnimalsDao
 import com.realworld.android.petsave.common.data.cache.daos.OrganizationsDao
+import com.realworld.android.petsave.common.data.cache.model.cachedanimal.CachedAnimalAggregate
 import com.realworld.android.petsave.common.data.cache.model.cachedorganization.CachedOrganization
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 class RoomCache @Inject constructor(
-    private val organizationsDao: OrganizationsDao
+    private val organizationsDao: OrganizationsDao,
+    private val animalsDao: AnimalsDao
 ) : Cache {
 
   override fun storeOrganizations(organizations: List<CachedOrganization>) {
     organizationsDao.insert(organizations)
   }
+
+    override fun getNearbyAnimals(): Flowable<List<CachedAnimalAggregate>> {
+        return animalsDao.getAllAnimals()
+    }
+
+    override suspend fun storeNearbyAnimals(animals: List<CachedAnimalAggregate>) {
+        animalsDao.insertAnimalsWithDetails(animals)
+    }
 }
